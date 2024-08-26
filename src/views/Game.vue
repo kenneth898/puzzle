@@ -6,9 +6,9 @@
 			<div class="Startpopup">
 				<h3>Original Image</h3>
 				<p>Are you ready to start?</p>
-				<img width="100%" :src="imageSrc" style="border-radius: 15px;" alt="Full Image">
-				<div class="start-btn">
-					<a @click="closeOriginalImg">Start</a>
+				<img :src="imageSrc" style="border-radius: 15px;" alt="Full Image">
+				<div class="start-btn" @click="closeOriginalImg">
+					<a href="#">Start</a>
 				</div>
 
 			</div>
@@ -51,9 +51,10 @@
 						<div ref="puzzleContainer" class="puzzle-wrap ">
 							<!-- Canvas container that is flexed in place -->
 							<div id="my-puzzle"></div>
-							<img :src="imageSrc" class="puzzle-solved" ref="solvedImage">
-
 						</div>
+						<img :src="imageSrc" class="puzzle-solved" ref="solvedImage">
+
+
 						<p class="drag-text" style="margin-top: 10px;">Drag The Puzzle into the Picture</p>
 					</div>
 				</div>
@@ -86,7 +87,7 @@
 					<div class="adpopup">
 						<img width="90%" src="/image/Group 1000005998.webp">
 						<div class="nextlevel" @click="nextLevel">
-							<a>NEXT LEVEL</a>
+							<a href="#">NEXT LEVEL</a>
 						</div>
 
 					</div>
@@ -96,14 +97,14 @@
 				<div v-if="showPopupTimeUp" class="overlay">
 					<div class="time-up">
 						<div class="time-logo">
-							<img width="35%" src="/image/timeup.webp">
+							<img src="/image/timeup.webp">
 						</div>
 						<h3>Time’s Up!</h3>
 						<p>Please try again</p>
-						<div class="timeup-ok">
-							<router-link class="nav-link" to="/">
+						<div class="timeup-ok" @click="TimeupOk">
+							<a href="#">
 								OK
-							</router-link>
+							</a>
 						</div>
 					</div>
 				</div>
@@ -174,10 +175,12 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapMutations } from 'vuex';
+import { mapActions } from 'vuex';
+import { mapGetters } from 'vuex';
+import { mapMutations } from 'vuex';
 
 export default {
-	name: 'Game',
+	name: 'Level',
 
 	data() {
 		return {
@@ -194,6 +197,7 @@ export default {
 			volume2: this.$store.getters.volume2,
 			bgmTimeup: null,
 			bgmCountdown: null,
+			bgmlast: null,
 			initialWidth: 10,
 			initialHeight: 10,
 			imagePaths: [
@@ -223,6 +227,8 @@ export default {
 			countdownValue: null,
 			showCountdownOverlay: false,
 			puzzlePickedAudio: null,
+			countdownStart: null,
+			countdownLast: null,
 		};
 	},
 	created() {
@@ -230,6 +236,8 @@ export default {
 		window.addEventListener('unload', this.handleUnload);
 		this.initBGMTimeup(); // Initialize Time Up BGM
 		this.selectRandomImage();
+		this.initCountdownStart();
+		this.initCountdownLast();
 	},
 	beforeUnmount() {
 		window.removeEventListener('beforeunload', this.setReloadFlag);
@@ -244,7 +252,7 @@ export default {
 			'volume2'
 		]),
 		formattedTime() {
-			const totalSeconds = Math.floor(this.remainingTime);
+			const totalSeconds = Math.max(Math.floor(this.remainingTime), 0);
 			const minutes = Math.floor(totalSeconds / 60);
 			const seconds = totalSeconds % 60;
 			return `${this.pad(minutes)}:${this.pad(seconds)}`;
@@ -264,12 +272,18 @@ export default {
 				this.$router.push('/level');
 			}, 500);
 		},
+		TimeupOk() {
+			this.playClickSound();
+			setTimeout(() => {
+				this.$router.push('/');
+			}, 500);
+		},
 		selectRandomImage() {
 			const randomIndex = Math.floor(Math.random() * this.imagePaths.length);
 			this.imageSrc = this.imagePaths[randomIndex];
 		},
 		stopAllSounds() {
-			// Assuming bgm refers to the background music
+
 			if (this.$refs.bgm) {
 				this.$refs.bgm.pause();   // Pause the BGM
 				this.$refs.bgm.currentTime = 0; // Reset the BGM to the start
@@ -282,17 +296,21 @@ export default {
 			this.playClickSound();
 			this.showOriginalImg = false;  // Hide the initial popup
 			this.startPreGameCountdown();  // Start the 3, 2, 1 countdown
+
 		},
 		startPreGameCountdown() {
+			this.playCountdownStart();
 			this.countdownValue = 3;
 			this.showCountdownOverlay = true;  // Show overlay for countdown
+
 
 			const countdownInterval = setInterval(() => {
 				if (this.countdownValue > 1) {
 					this.countdownValue--;
+
 				} else {
 					clearInterval(countdownInterval);
-					this.startGame();  // Start the game after 3, 2, 1 countdown finishes
+					this.startGame();
 				}
 			}, 1000);  // Update every second
 		},
@@ -300,7 +318,7 @@ export default {
 			this.showCountdownOverlay = false;
 			this.startCountdown();
 			this.initializePuzzle();
-			// Removed selectRandomImage from here to ensure the image doesn't change mid-game
+
 			setTimeout(() => {
 				this.initializePuzzle();
 			}, 100);
@@ -321,15 +339,15 @@ export default {
 
 			document.body.style.overflow = 'auto';
 		},
-		// Initialize the Level 2 BGM
+
 		initLevel2BGM() {
 			this.level2BGM = new Audio('/Sound Effects KK8 Merdeka/New Level.wav'); // Update with the correct path to your Level 2 BGM
-			this.level2BGM.loop = false; // Loop the BGM if needed
+			this.level2BGM.loop = false;
 		},
-		// Play the Level 2 BGM
+
 		playLevel2BGM() {
 			this.pauseCountdown();
-			this.stopBGMTimeup(); // Ensure the countdown BGM is stopped
+			this.stopBGMTimeup();
 			if (this.level2BGM) {
 				this.level2BGM.volume = this.volume1;
 				this.level2BGM.play();
@@ -368,12 +386,12 @@ export default {
 			}
 		},
 		initBGMCountdown() {
-			this.bgmCountdown = new Audio('/Sound Effects KK8 Merdeka/Game Ticking.wav');
-			this.bgmCountdown.loop = true;
+			this.bgmCountdown = new Audio('/Sound Effects KK8 Merdeka/Game Ticking20.wav');
+			this.bgmCountdown.loop = false;
 		},
 		playBGMCountdown() {
 			if (this.bgmCountdown) {
-				this.bgmCountdown.volume = this.volume2;
+				this.bgmCountdown.volume = this.volume1;
 				this.bgmCountdown.play();
 			}
 		},
@@ -383,6 +401,7 @@ export default {
 				this.bgmCountdown.currentTime = 0;
 			}
 		},
+
 		initBGMPiece() {
 			this.bgmPiece = new Audio('/Sound Effects KK8 Merdeka/Puzzle Picked.wav');
 			this.bgmPiece.loop = false;
@@ -397,6 +416,38 @@ export default {
 			if (this.bgmPiece) {
 				this.bgmPiece.pause();
 				this.bgmPiece.currentTime = 0;
+			}
+		},
+		initCountdownStart() {
+			this.CountdownStart = new Audio('/Sound Effects KK8 Merdeka/3 2 1 0 Countdown With Sound Effect _ No Copyright _ Ready To Use [ ezmp3.cc ].mp3');
+			this.CountdownStart.loop = false;
+		},
+		playCountdownStart() {
+			if (this.CountdownStart) {
+				this.CountdownStart.volume = this.volume1;
+				this.CountdownStart.play();
+			}
+		},
+		stopCountdownStart() {
+			if (this.CountdownStart) {
+				this.CountdownStart.pause();
+				this.CountdownStart.currentTime = 0;
+			}
+		},
+		initCountdownLast() {
+			this.countdownLast = new Audio('/Sound Effects KK8 Merdeka/mix_10s.mp3');
+			this.countdownLast.loop = false;
+		},
+		playCountdownLast() {
+			if (this.countdownLast) {
+				this.countdownLast.volume = this.volume1;
+				this.countdownLast.play();
+			}
+		},
+		stopCountdownLast() {
+			if (this.countdownLast) {
+				this.countdownLast.pause();
+				this.countdownLast.currentTime = 0;
 			}
 		},
 		stopAllSounds() {
@@ -483,16 +534,25 @@ export default {
 			if (this.timer) clearInterval(this.timer);
 
 			this.timer = setInterval(() => {
-				if (this.remainingTime > 0) {
+				if (this.remainingTime > 1.5) {
 					this.remainingTime -= 0.1;
-					this.playBGMCountdown();
+
+					if (Math.floor(this.remainingTime) > 10) {
+						this.playBGMCountdown();
+					} else if (Math.floor(this.remainingTime) === 10) {
+						this.stopBGMCountdown(); // Stop the BGM countdown when it reaches 10 seconds
+						this.playCountdownLast(); // Start the last countdown sound
+					}
 				} else {
-					this.stopCountdown();
+					this.remainingTime = 1.5;
+					clearInterval(this.timer);
 					this.showPopupTimeUp = true;
-					this.stopAllSounds(); // Stop all other sounds
+					this.stopAllSounds();
 				}
-			}, 100); // Set interval to 100 milliseconds (0.1 second)
+			}, 100);
 		},
+
+
 		stopCountdown() {
 			clearInterval(this.timer);
 			this.timer = null;
@@ -505,7 +565,7 @@ export default {
 		initializePuzzle() {
 			const initialWidth = this.$refs.puzzleContainer.offsetWidth;
 			const initialHeight = this.$refs.puzzleContainer.offsetHeight;
-			const pieceSize = Math.min(initialWidth, initialHeight) * 0.9 / 2;
+			const pieceSize = Math.min(initialWidth, initialHeight) * 0.98 / 2;
 			this.initBGMPiece();
 
 
@@ -516,7 +576,7 @@ export default {
 					width: initialWidth,
 					height: initialHeight,
 					pieceSize: pieceSize,
-					proximity: 20,
+					proximity: 10,
 					borderFill: 1,
 					strokeWidth: 1,
 					strokeColor: '#FFFFFF',
@@ -525,7 +585,6 @@ export default {
 					fixed: true,
 					outline: new headbreaker.outline.Rounded(),
 					preventOffstageDrag: true,
-
 				});
 
 				randomized.adjustImagesToPuzzleHeight();
@@ -538,6 +597,8 @@ export default {
 
 				randomized.draw();
 
+
+
 				randomized.onConnect((it) => {
 					this.bgmPiece.volume = this.volume2;
 					this.bgmPiece.play();
@@ -547,6 +608,8 @@ export default {
 					this.bgmPiece.volume = this.volume2;
 					this.bgmPiece.play();
 				});
+
+
 
 				['resize', 'DOMContentLoaded'].forEach((event) => {
 					window.addEventListener(event, () => {
@@ -607,6 +670,7 @@ export default {
 		},
 		showPopupTimeUp(newValue) {
 			if (newValue) {
+				this.stopAllSounds();
 				this.playBGMTimeup(); // Time Up时播放BGM
 			} else {
 				this.stopBGMTimeup();
@@ -643,6 +707,8 @@ export default {
 		this.updateVolume1();
 		this.updateVolume2();
 		this.initLevel2BGM();
+		this.initCountdownStart();
+		this.initCountdownLast();
 		this.showOriginalImg = true;
 	},
 	beforeRouteLeave(to, from, next) {
@@ -786,7 +852,7 @@ export default {
 	color: #FFF;
 	text-align: center;
 	font-family: Montserrat;
-	font-size: 16px;
+	font-size: 14px;
 	font-style: normal;
 	font-weight: 700;
 	line-height: normal;
@@ -920,8 +986,12 @@ export default {
 	position: absolute;
 	top: -26px;
 	right: 0;
-
 }
+
+.time-logo img {
+	width: 30%;
+}
+
 
 .home-continue-btn {
 	display: flex;
@@ -963,7 +1033,7 @@ export default {
 	background-image: url('/image/time-up.webp');
 	background-size: cover;
 	background-repeat: round;
-	width: 325px;
+	width: 300px;
 	height: 259px;
 	flex-shrink: 0;
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -976,7 +1046,7 @@ export default {
 	color: #FFF;
 	text-align: center;
 	font-family: Montserrat;
-	font-size: 24px;
+	font-size: 26px;
 	font-style: normal;
 	font-weight: 700;
 	line-height: normal;
@@ -998,23 +1068,40 @@ export default {
 	color: #FFF;
 	text-align: center;
 	font-family: Montserrat;
-	font-size: 12px;
+	font-size: 16px;
 	font-style: normal;
 	font-weight: 500;
 	line-height: normal;
+}
+
+@media screen and (min-width: 375px) {
+
+	.time-up h3 {
+		font-size: 28px;
+	}
+
+	.time-up {
+		width: 325px;
+	}
+
+	.time-logo img {
+		width: 35%;
+	}
 }
 
 .timeup-ok {
 	text-align: center;
 	position: absolute;
 	bottom: -18px;
-	width: 55%;
+	width: 50%;
 	background-image: url('/image/start_bg.webp');
 	background-size: cover;
 	background-repeat: round;
 	padding: 15px;
-	transform: translate(42%, 0);
+	transform: translate(50%, 0);
 }
+
+
 
 .timeup-ok a {
 	font-family: Montserrat;
@@ -1050,10 +1137,8 @@ export default {
 #my-puzzle {
 	width: 100%;
 	height: 100%;
-	display: flex;
+	display: block;
 	background: #ffffffb6;
-	align-self: flex-end;
-
 }
 
 .drag-text {
@@ -1061,7 +1146,23 @@ export default {
 	font-weight: bold;
 	position: relative;
 	text-align: center;
+	font-size: 14px;
 }
+
+@media screen and (min-width: 425px) {
+	.drag-text {
+		font-size: 16px;
+	}
+
+	.view p {
+		font-size: 16px;
+	}
+
+	.countdownTime p {
+		font-size: 16px;
+	}
+}
+
 
 .pieces-container {
 	display: flex;
@@ -1194,9 +1295,32 @@ export default {
 	font-family: Montserrat;
 }
 
-.Startpopup h3 {
-	font-size: 30px;
+.Startpopup img {
+	width: 80%;
 }
+
+@media screen and (min-width: 375px) {
+	.Startpopup img {
+		width: 100%;
+	}
+
+	.Startpopup h3 {
+		font-size: 30px;
+	}
+
+	.Startpopup p {
+		font-size: 16px;
+	}
+}
+
+.Startpopup h3 {
+	font-size: 28px;
+}
+
+.Startpopup p {
+	font-size: 14px;
+}
+
 
 .start-btn {
 	background-image: url('/image/start_bg.webp');
@@ -1205,9 +1329,15 @@ export default {
 	text-decoration: none;
 	background-size: cover;
 	background-repeat: round;
-	padding: 20px 0px;
-	width: 70%;
+	padding: 12px 0px;
+	width: 55%;
+}
 
+@media screen and (min-width: 375px) {
+	.start-btn {
+		width: 70%;
+		padding: 20px 0px;
+	}
 }
 
 .start-btn a {

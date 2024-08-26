@@ -6,9 +6,9 @@
 			<div class="Startpopup">
 				<h3>Original Image</h3>
 				<p>Are you ready to start?</p>
-				<img width="100%" :src="imageSrc" style="border-radius: 15px;" alt="Full Image">
-				<div class="start-btn">
-					<a @click="closeOriginalImg">Start</a>
+				<img :src="imageSrc" style="border-radius: 15px;" alt="Full Image">
+				<div class="start-btn" @click="closeOriginalImg">
+					<a href="#">Start</a>
 				</div>
 
 			</div>
@@ -22,7 +22,7 @@
 			<div class="row">
 				<div class="icon">
 					<div class="level">
-						<h3>Level 1</h3>
+						<h3>Level 2</h3>
 					</div>
 					<button @click="showPause" style="border: none; background: none;">
 						<svg width="30" height="30" viewBox="0 0 19 21" xmlns="http://www.w3.org/2000/svg">
@@ -64,6 +64,7 @@
 						<img :src="imageSrc" style="border-radius: 15px;" alt="Full Image">
 					</button>
 				</div>
+				<audio ref="clickSound" src="/Sound Effects KK8 Merdeka/Menu Alert.mp3"></audio>
 
 				<!-- Full Image Popup -->
 				<div v-if="showPopupImage" class="overlay" @click.self="hidePopupImage">
@@ -80,6 +81,7 @@
 					</div>
 				</div>
 
+
 				<!-- congrats Popup -->
 				<div v-if="showPopupLevel2" class="overlay">
 					<div class="congrats">
@@ -94,7 +96,6 @@
 					</div>
 				</div>
 
-
 				<!-- Time Up Overlay -->
 				<div v-if="showPopupTimeUp" class="overlay">
 					<div class="time-up">
@@ -103,10 +104,10 @@
 						</div>
 						<h3>Time’s Up!</h3>
 						<p>Please try again</p>
-						<div class="timeup-ok">
-							<router-link class="nav-link" to="/">
+						<div class="timeup-ok" @click="TimeupOk">
+							<a href="#">
 								OK
-							</router-link>
+							</a>
 						</div>
 					</div>
 				</div>
@@ -122,7 +123,7 @@
 						<div class="pause-content">
 							<h3>Paused!</h3>
 							<div class="musicbar">
-								<svg width="40" height="40" viewBox="0 0 28 30" fill="none"
+								<svg width="35" height="35" viewBox="0 0 28 30" fill="none"
 									xmlns="http://www.w3.org/2000/svg">
 									<path
 										d="M27.8987 1.70642C27.8986 0.796874 27.1068 0.0899758 26.2031 0.192674L7.47878 2.32046C6.70887 2.40795 6.12726 3.05939 6.12726 3.83426V18.5821C6.12726 18.9956 5.75904 19.309 5.34558 19.309C2.39798 19.309 0 21.7069 0 24.6544C0 27.602 2.39798 30 5.34558 30C8.23849 30 10.6004 27.6895 10.6869 24.8172C10.6869 24.8163 10.6876 24.8156 10.6885 24.8156C10.6894 24.8156 10.6901 24.8149 10.6901 24.814V10.2249C10.6901 9.45006 11.2717 8.79862 12.0416 8.71113L21.6402 7.62031C22.5439 7.5176 23.3358 8.22453 23.3358 9.1341V16.6125C23.3358 17.0271 22.9664 17.3413 22.5518 17.3413C19.6042 17.3413 17.2063 19.7392 17.2063 22.6867C17.2063 25.6343 19.6042 28.0323 22.5518 28.0323C25.4412 28.0323 27.8399 25.7309 27.8994 22.8601L27.8987 1.70642Z"
@@ -177,10 +178,12 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapMutations } from 'vuex';
+import { mapActions } from 'vuex';
+import { mapGetters } from 'vuex';
+import { mapMutations } from 'vuex';
 
 export default {
-	name: 'Game',
+	name: 'Level',
 
 	data() {
 		return {
@@ -197,6 +200,7 @@ export default {
 			volume2: this.$store.getters.volume2,
 			bgmTimeup: null,
 			bgmCountdown: null,
+			bgmlast: null,
 			initialWidth: 10,
 			initialHeight: 10,
 			imagePaths: [
@@ -225,6 +229,9 @@ export default {
 			showOriginalImg: false,
 			countdownValue: null,
 			showCountdownOverlay: false,
+			puzzlePickedAudio: null,
+			countdownStart: null,
+			countdownLast: null,
 		};
 	},
 	created() {
@@ -232,6 +239,8 @@ export default {
 		window.addEventListener('unload', this.handleUnload);
 		this.initBGMTimeup(); // Initialize Time Up BGM
 		this.selectRandomImage();
+		this.initCountdownStart();
+		this.initCountdownLast();
 	},
 	beforeUnmount() {
 		window.removeEventListener('beforeunload', this.setReloadFlag);
@@ -246,19 +255,38 @@ export default {
 			'volume2'
 		]),
 		formattedTime() {
-			const totalSeconds = Math.floor(this.remainingTime);
+			const totalSeconds = Math.max(Math.floor(this.remainingTime), 0);
 			const minutes = Math.floor(totalSeconds / 60);
 			const seconds = totalSeconds % 60;
 			return `${this.pad(minutes)}:${this.pad(seconds)}`;
 		}
 	},
 	methods: {
+		playClickSound() {
+			const clickSound = this.$refs.clickSound;
+			if (clickSound) {
+				clickSound.currentTime = 0;
+				clickSound.play();
+			}
+		},
+		nextLevel() {
+			this.playClickSound();
+			setTimeout(() => {
+				this.$router.push('/level');
+			}, 500);
+		},
+		TimeupOk() {
+			this.playClickSound();
+			setTimeout(() => {
+				this.$router.push('/');
+			}, 500);
+		},
 		selectRandomImage() {
 			const randomIndex = Math.floor(Math.random() * this.imagePaths.length);
 			this.imageSrc = this.imagePaths[randomIndex];
 		},
 		stopAllSounds() {
-			// Assuming bgm refers to the background music
+
 			if (this.$refs.bgm) {
 				this.$refs.bgm.pause();   // Pause the BGM
 				this.$refs.bgm.currentTime = 0; // Reset the BGM to the start
@@ -268,19 +296,24 @@ export default {
 			// Add any other sounds you need to stop here
 		},
 		closeOriginalImg() {
+			this.playClickSound();
 			this.showOriginalImg = false;  // Hide the initial popup
 			this.startPreGameCountdown();  // Start the 3, 2, 1 countdown
+
 		},
 		startPreGameCountdown() {
+			this.playCountdownStart();
 			this.countdownValue = 3;
 			this.showCountdownOverlay = true;  // Show overlay for countdown
+
 
 			const countdownInterval = setInterval(() => {
 				if (this.countdownValue > 1) {
 					this.countdownValue--;
+
 				} else {
 					clearInterval(countdownInterval);
-					this.startGame();  // Start the game after 3, 2, 1 countdown finishes
+					this.startGame();
 				}
 			}, 1000);  // Update every second
 		},
@@ -288,7 +321,7 @@ export default {
 			this.showCountdownOverlay = false;
 			this.startCountdown();
 			this.initializePuzzle();
-			// Removed selectRandomImage from here to ensure the image doesn't change mid-game
+
 			setTimeout(() => {
 				this.initializePuzzle();
 			}, 100);
@@ -309,15 +342,15 @@ export default {
 
 			document.body.style.overflow = 'auto';
 		},
-		// Initialize the Level 2 BGM
+
 		initLevel2BGM() {
 			this.level2BGM = new Audio('/Sound Effects KK8 Merdeka/New Level.wav'); // Update with the correct path to your Level 2 BGM
-			this.level2BGM.loop = false; // Loop the BGM if needed
+			this.level2BGM.loop = false;
 		},
-		// Play the Level 2 BGM
+
 		playLevel2BGM() {
 			this.pauseCountdown();
-			this.stopBGMTimeup(); // Ensure the countdown BGM is stopped
+			this.stopBGMTimeup();
 			if (this.level2BGM) {
 				this.level2BGM.volume = this.volume1;
 				this.level2BGM.play();
@@ -356,12 +389,12 @@ export default {
 			}
 		},
 		initBGMCountdown() {
-			this.bgmCountdown = new Audio('/Sound Effects KK8 Merdeka/Game Ticking.wav');
-			this.bgmCountdown.loop = true;
+			this.bgmCountdown = new Audio('/Sound Effects KK8 Merdeka/Game Ticking20.wav');
+			this.bgmCountdown.loop = false;
 		},
 		playBGMCountdown() {
 			if (this.bgmCountdown) {
-				this.bgmCountdown.volume = this.volume2;
+				this.bgmCountdown.volume = this.volume1;
 				this.bgmCountdown.play();
 			}
 		},
@@ -371,9 +404,10 @@ export default {
 				this.bgmCountdown.currentTime = 0;
 			}
 		},
+
 		initBGMPiece() {
 			this.bgmPiece = new Audio('/Sound Effects KK8 Merdeka/Puzzle Picked.wav');
-			this.bgmPiece.loop = true;
+			this.bgmPiece.loop = false;
 		},
 		playBGMPiece() {
 			if (this.bgmPiece) {
@@ -385,6 +419,38 @@ export default {
 			if (this.bgmPiece) {
 				this.bgmPiece.pause();
 				this.bgmPiece.currentTime = 0;
+			}
+		},
+		initCountdownStart() {
+			this.CountdownStart = new Audio('/Sound Effects KK8 Merdeka/3 2 1 0 Countdown With Sound Effect _ No Copyright _ Ready To Use [ ezmp3.cc ].mp3');
+			this.CountdownStart.loop = false;
+		},
+		playCountdownStart() {
+			if (this.CountdownStart) {
+				this.CountdownStart.volume = this.volume1;
+				this.CountdownStart.play();
+			}
+		},
+		stopCountdownStart() {
+			if (this.CountdownStart) {
+				this.CountdownStart.pause();
+				this.CountdownStart.currentTime = 0;
+			}
+		},
+		initCountdownLast() {
+			this.countdownLast = new Audio('/Sound Effects KK8 Merdeka/mix_10s.mp3');
+			this.countdownLast.loop = false;
+		},
+		playCountdownLast() {
+			if (this.countdownLast) {
+				this.countdownLast.volume = this.volume1;
+				this.countdownLast.play();
+			}
+		},
+		stopCountdownLast() {
+			if (this.countdownLast) {
+				this.countdownLast.pause();
+				this.countdownLast.currentTime = 0;
 			}
 		},
 		stopAllSounds() {
@@ -471,16 +537,25 @@ export default {
 			if (this.timer) clearInterval(this.timer);
 
 			this.timer = setInterval(() => {
-				if (this.remainingTime > 0) {
+				if (this.remainingTime > 1) {
 					this.remainingTime -= 0.1;
-					this.playBGMCountdown();
+
+					if (Math.floor(this.remainingTime) > 10) {
+						this.playBGMCountdown();
+					} else if (Math.floor(this.remainingTime) === 10) {
+						this.stopBGMCountdown(); // Stop the BGM countdown when it reaches 10 seconds
+						this.playCountdownLast(); // Start the last countdown sound
+					}
 				} else {
-					this.stopCountdown();
+					this.remainingTime = 0;
+					clearInterval(this.timer);
 					this.showPopupTimeUp = true;
-					this.stopAllSounds(); // Stop all other sounds
+					this.stopAllSounds();
 				}
-			}, 100); // Set interval to 100 milliseconds (0.1 second)
+			}, 100);
 		},
+
+
 		stopCountdown() {
 			clearInterval(this.timer);
 			this.timer = null;
@@ -493,8 +568,9 @@ export default {
 		initializePuzzle() {
 			const initialWidth = this.$refs.puzzleContainer.offsetWidth;
 			const initialHeight = this.$refs.puzzleContainer.offsetHeight;
-			const pieceSize = Math.min(initialWidth, initialHeight) * 0.4 / 2;
-			var audio = new Audio('/Sound Effects KK8 Merdeka/Puzzle Picked.wav');
+			const pieceSize = Math.min(initialWidth, initialHeight) * 0.48 / 2;
+			this.initBGMPiece();
+
 
 			let dali = new Image();
 			dali.src = this.imageSrc;
@@ -503,7 +579,7 @@ export default {
 					width: initialWidth,
 					height: initialHeight,
 					pieceSize: pieceSize,
-					proximity: 20,
+					proximity: 10,
 					borderFill: 1,
 					strokeWidth: 1,
 					strokeColor: '#FFFFFF',
@@ -512,7 +588,6 @@ export default {
 					fixed: true,
 					outline: new headbreaker.outline.Rounded(),
 					preventOffstageDrag: true,
-
 				});
 
 				randomized.adjustImagesToPuzzleHeight();
@@ -525,13 +600,19 @@ export default {
 
 				randomized.draw();
 
+
+
 				randomized.onConnect((it) => {
-					audio.play();
+					this.bgmPiece.volume = this.volume2;
+					this.bgmPiece.play();
 				});
 
 				randomized.onDisconnect((it) => {
-					audio.play();
+					this.bgmPiece.volume = this.volume2;
+					this.bgmPiece.play();
 				});
+
+
 
 				['resize', 'DOMContentLoaded'].forEach((event) => {
 					window.addEventListener(event, () => {
@@ -628,6 +709,8 @@ export default {
 		this.updateVolume1();
 		this.updateVolume2();
 		this.initLevel2BGM();
+		this.initCountdownStart();
+		this.initCountdownLast();
 		this.showOriginalImg = true;
 	},
 	beforeRouteLeave(to, from, next) {
@@ -771,7 +854,7 @@ export default {
 	color: #FFF;
 	text-align: center;
 	font-family: Montserrat;
-	font-size: 16px;
+	font-size: 14px;
 	font-style: normal;
 	font-weight: 700;
 	line-height: normal;
@@ -948,7 +1031,7 @@ export default {
 	background-image: url('/image/time-up.webp');
 	background-size: cover;
 	background-repeat: round;
-	width: 325px;
+	width: 300px;
 	height: 259px;
 	flex-shrink: 0;
 	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
@@ -961,7 +1044,7 @@ export default {
 	color: #FFF;
 	text-align: center;
 	font-family: Montserrat;
-	font-size: 24px;
+	font-size: 26px;
 	font-style: normal;
 	font-weight: 700;
 	line-height: normal;
@@ -983,23 +1066,36 @@ export default {
 	color: #FFF;
 	text-align: center;
 	font-family: Montserrat;
-	font-size: 12px;
+	font-size: 16px;
 	font-style: normal;
 	font-weight: 500;
 	line-height: normal;
+}
+
+@media screen and (min-width: 375px) {
+
+	.time-up h3 {
+		font-size: 28px;
+	}
+
+	.time-up {
+		width: 325px;
+	}
 }
 
 .timeup-ok {
 	text-align: center;
 	position: absolute;
 	bottom: -18px;
-	width: 55%;
+	width: 50%;
 	background-image: url('/image/start_bg.webp');
 	background-size: cover;
 	background-repeat: round;
 	padding: 15px;
-	transform: translate(42%, 0);
+	transform: translate(50%, 0);
 }
+
+
 
 .timeup-ok a {
 	font-family: Montserrat;
@@ -1046,7 +1142,23 @@ export default {
 	font-weight: bold;
 	position: relative;
 	text-align: center;
+	font-size: 14px;
 }
+
+@media screen and (min-width: 425px) {
+	.drag-text {
+		font-size: 16px;
+	}
+
+	.view p {
+		font-size: 16px;
+	}
+
+	.countdownTime p {
+		font-size: 16px;
+	}
+}
+
 
 .pieces-container {
 	display: flex;
@@ -1168,8 +1280,63 @@ export default {
 	height: 20%;
 	align-content: center;
 	position: absolute;
-	bottom: -30%;
+	bottom: -5%;
 	transform: translate(50%, 0);
+}
+
+.congrats {
+	background-image: url('/image/congrats.webp');
+	background-size: cover;
+	background-repeat: round;
+	height: 350px;
+	width: 400px;
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+	text-align: center;
+	align-content: center;
+	position: relative;
+	text-align: -webkit-center;
+	transform: translate(0, 0%);
+}
+
+.congrats h3 {
+	color: #FFF;
+	text-align: center;
+	font-family: Montserrat;
+	font-size: 24px;
+	font-style: normal;
+	font-weight: 700;
+	line-height: normal;
+	margin-top: 100px;
+}
+
+.congrats p {
+	color: #FFF;
+	text-align: center;
+	font-family: Montserrat;
+	font-size: 14px;
+	font-style: normal;
+	font-weight: 500;
+	line-height: normal;
+}
+
+.congrats a {
+	font-family: Montserrat;
+	font-size: 24px;
+	font-weight: 700;
+	line-height: 32.27px;
+	background: linear-gradient(0deg, #CF8403 0%, #BC4F01 55.59%);
+	-webkit-background-clip: text;
+	-webkit-text-fill-color: transparent;
+}
+
+@media screen and (min-width:425px) {
+	.congrats p {
+		font-size: 16px;
+	}
+
+	.congrats a {
+		font-size: 16px;
+	}
 }
 
 .Startpopup {
@@ -1177,6 +1344,16 @@ export default {
 	text-align: -webkit-center;
 	font-weight: 700;
 	font-family: Montserrat;
+}
+
+.Startpopup img {
+	width: 80%;
+}
+
+@media screen and (min-width: 375px) {
+	.Startpopup img {
+		width: 100%;
+	}
 }
 
 .Startpopup h3 {
@@ -1190,9 +1367,15 @@ export default {
 	text-decoration: none;
 	background-size: cover;
 	background-repeat: round;
-	padding: 20px 0px;
-	width: 70%;
+	padding: 12px 0px;
+	width: 55%;
+}
 
+@media screen and (min-width: 375px) {
+	.start-btn {
+		width: 70%;
+		padding: 20px 0px;
+	}
 }
 
 .start-btn a {
@@ -1215,50 +1398,5 @@ export default {
 
 .countdown {
 	position: relative;
-}
-
-.congrats {
-	background-image: url('/image/congrats.webp');
-	background-size: cover;
-	background-repeat: round;
-	height: 350px;
-	width: 400px;
-	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-	text-align: center;
-	align-content: center;
-	position: relative;
-	text-align: -webkit-center;
-	transform: translate(0, -15%);
-}
-
-.congrats h3 {
-	color: #FFF;
-	text-align: center;
-	font-family: Montserrat;
-	font-size: 24px;
-	font-style: normal;
-	font-weight: 700;
-	line-height: normal;
-	margin-top: 100px;
-}
-
-.congrats p {
-	color: #FFF;
-	text-align: center;
-	font-family: Montserrat;
-	font-size: 12px;
-	font-style: normal;
-	font-weight: 500;
-	line-height: normal;
-}
-
-.congrats a {
-	font-family: Montserrat;
-	font-size: 27px;
-	font-weight: 700;
-	line-height: 32.27px;
-	background: linear-gradient(0deg, #CF8403 0%, #BC4F01 55.59%);
-	-webkit-background-clip: text;
-	-webkit-text-fill-color: transparent;
 }
 </style>
