@@ -1,0 +1,26 @@
+{
+	"name": "puzzle",
+	"version": "0.0.0",
+	"private": true,
+	"type": "module",
+	"scripts": {
+		"dev": "vite --host",
+		"build": "vite build",
+		"preview": "vite preview"
+	},
+	"dependencies": {
+		"bootstrap": "^5.3.3",
+		"gsap": "^3.12.5",
+		"headbreaker": "^3.0.0",
+		"vue": "^3.4.29",
+		"vue-draggable-next": "^2.2.1",
+		"vue-router": "^4.0.13",
+		"vue3-lazyload": "^0.3.8",
+		"vuex": "^4.0.2",
+		"vuex-persistedstate": "^4.1.0"
+	},
+	"devDependencies": {
+		"@vitejs/plugin-vue": "^5.0.5",
+		"vite": "^5.3.1"
+	}
+}
