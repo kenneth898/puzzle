@@ -902,7 +902,7 @@ export default {
 	color: #FFF;
 	text-align: center;
 	font-family: Montserrat;
-	font-size: 14px;
+	font-size: 16px;
 	font-style: normal;
 	font-weight: 700;
 	line-height: normal;
