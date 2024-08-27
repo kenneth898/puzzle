@@ -1205,7 +1205,7 @@ export default {
 	}
 
 	.view p {
-		font-size: 18px;
+		font-size: 16px;
 	}
 
 	.countdownTime p {
