@@ -229,6 +229,8 @@ export default {
 			puzzlePickedAudio: null,
 			countdownStart: null,
 			countdownLast: null,
+			countdownLastPlayed: false,
+			countdownLastPauseTime: 0,
 		};
 	},
 	created() {
@@ -363,13 +365,12 @@ export default {
 				this.level2BGM.currentTime = 0;
 			}
 		},
-		// Method to hide the Level 2 popup and stop BGM
 		hidePopupLevel2() {
 			this.showPopupLevel2 = false;
 			this.stopLevel2BGM(); // Stop Level 2 BGM when popup is closed
 		},
 		initBGMTimeup() {
-			this.bgmTimeup = new Audio('/Sound Effects KK8 Merdeka/Timeout.wav'); // 适配你的Time Up BGM
+			this.bgmTimeup = new Audio('/Sound Effects KK8 Merdeka/Timeout.wav');
 			this.bgmTimeup.loop = true;
 		},
 		playBGMTimeup() {
@@ -441,13 +442,15 @@ export default {
 		playCountdownLast() {
 			if (this.countdownLast) {
 				this.countdownLast.volume = this.volume1;
+				this.countdownLast.currentTime = this.countdownLastPauseTime; // Resume from paused time
 				this.countdownLast.play();
+				this.countdownLastPlayed = true;
 			}
 		},
 		stopCountdownLast() {
 			if (this.countdownLast) {
+				this.countdownLastPauseTime = this.countdownLast.currentTime; // Save current time
 				this.countdownLast.pause();
-				this.countdownLast.currentTime = 0;
 			}
 		},
 		stopAllSounds() {
@@ -504,7 +507,15 @@ export default {
 		showPause() {
 			this.showPopupPause = true;
 			this.pauseCountdown();
-			this.stopBGMTimeup(); // 暂停时不播放 Time Up BGM
+
+			// Pause the background music and store the current time
+			if (this.$refs.bgm) {
+				this.$refs.bgm.pause();
+				this.bgmCurrentTime = this.$refs.bgm.currentTime;
+			}
+
+			this.stopBGMTimeup();
+			this.stopCountdownLast();
 
 			this.$nextTick(() => {
 				this.updateVolumeDisplay('volume-slider-1', this.volume1);
@@ -514,12 +525,35 @@ export default {
 		pauseCountdown() {
 			clearInterval(this.timer);
 			this.timer = null;
-			this.stopBGMCountdown();
+			if (this.bgmCountdown && this.bgmCountdown.currentTime > 0) {
+				this.bgmCountdownTime = this.bgmCountdown.currentTime;
+				this.bgmCountdown.pause();
+			}
+			if (this.countdownLast && this.countdownLast.currentTime > 0) {
+				this.countdownLastTime = this.countdownLast.currentTime;
+				this.countdownLast.pause();
+			}
+			if (this.$refs.bgm) {
+				this.bgmTime = this.$refs.bgm.currentTime;
+				this.$refs.bgm.pause();
+			}
 		},
 		continueCountdown() {
 			this.showPopupPause = false;
 			this.startCountdown();
-			this.playBGMCountdown();
+
+			if (this.bgmCountdown && this.bgmCountdownTime > 0) {
+				this.bgmCountdown.currentTime = this.bgmCountdownTime;
+				this.bgmCountdown.play();
+			}
+			if (this.countdownLast && this.countdownLastTime > 0) {
+				this.countdownLast.currentTime = this.countdownLastTime;
+				this.countdownLast.play();
+			}
+			if (this.$refs.bgm) {
+				this.$refs.bgm.currentTime = this.bgmTime;
+				this.$refs.bgm.play();
+			}
 		},
 		formattedTime() {
 			const totalSeconds = Math.floor(this.remainingTime);
@@ -534,22 +568,38 @@ export default {
 			if (this.timer) clearInterval(this.timer);
 
 			this.timer = setInterval(() => {
-				if (this.remainingTime > 1.5) {
+				if (this.remainingTime > 0.7) {
 					this.remainingTime -= 0.1;
 
 					if (Math.floor(this.remainingTime) > 10) {
 						this.playBGMCountdown();
-					} else if (Math.floor(this.remainingTime) === 10) {
-						this.stopBGMCountdown(); // Stop the BGM countdown when it reaches 10 seconds
-						this.playCountdownLast(); // Start the last countdown sound
+					} else if (Math.floor(this.remainingTime) === 10 && !this.countdownLastPlayed) {
+						this.stopBGMCountdown();
+						this.playCountdownLast();
 					}
 				} else {
-					this.remainingTime = 1.5;
+					this.remainingTime = 0.7;
 					clearInterval(this.timer);
 					this.showPopupTimeUp = true;
 					this.stopAllSounds();
 				}
 			}, 100);
+		},
+		pauseCountdown() {
+			clearInterval(this.timer);
+			this.timer = null;
+			this.stopBGMCountdown();
+			this.stopCountdownLast(); // Stop the last 10-second music if it's playing
+		},
+		continueCountdown() {
+			this.showPopupPause = false;
+			this.startCountdown();
+
+			if (Math.floor(this.remainingTime) <= 10) {
+				this.playCountdownLast();
+			} else {
+				this.playBGMCountdown();
+			}
 		},
 
 
