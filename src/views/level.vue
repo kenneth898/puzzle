@@ -829,6 +829,12 @@ export default {
 	line-height: normal;
 }
 
+@media screen and (min-width:548px) {
+	.level h3 {
+		font-size: 28px;
+	}
+}
+
 .icon button {
 	margin-left: auto;
 	border: none;
@@ -901,11 +907,27 @@ export default {
 	text-align: center;
 }
 
+.countdownView p {
+	color: #FFF;
+	text-align: center;
+	font-family: Montserrat;
+	font-size: 16px;
+	font-style: normal;
+	font-weight: 700;
+	line-height: normal;
+}
+
+@media screen and (min-width:548px) {
+	.countdownTime p {
+		font-size: 18px;
+	}
+}
+
 .countdownTime p {
 	color: #FFF;
 	text-align: center;
 	font-family: Montserrat;
-	font-size: 14px;
+	font-size: 16px;
 	font-style: normal;
 	font-weight: 700;
 	line-height: normal;
@@ -1198,16 +1220,14 @@ export default {
 
 @media screen and (min-width: 425px) {
 	.drag-text {
-		font-size: 16px;
+		font-size: 18px;
 	}
 
 	.view p {
-		font-size: 16px;
+		font-size: 18px;
 	}
 
-	.countdownTime p {
-		font-size: 16px;
-	}
+
 }
 
 

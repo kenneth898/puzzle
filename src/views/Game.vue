@@ -1201,15 +1201,16 @@ export default {
 
 @media screen and (min-width: 425px) {
 	.drag-text {
-		font-size: 16px;
+		font-size: 18px;
 	}
 
 	.view p {
-		font-size: 16px;
+		font-size: 18px;
 	}
 
 	.countdownTime p {
-		font-size: 16px;
+		font-size: 18px;
+
 	}
 }
 
