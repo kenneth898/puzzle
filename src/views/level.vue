@@ -101,7 +101,7 @@
 				</div>
 
 				<!-- Time Up Overlay -->
-				<!-- <div v-if="showPopupTimeUp" class="overlay">
+				<div v-if="showPopupTimeUp" class="overlay">
 					<div class="time-up">
 						<div class="time-logo">
 							<img width="35%" src="/image/timeup.webp">
@@ -114,7 +114,7 @@
 							</a>
 						</div>
 					</div>
-				</div> -->
+				</div>
 
 				<!-- Pause Overlay -->
 				<div v-if="showPopupPause" class="overlay">
@@ -844,7 +844,7 @@ export default {
 	padding-top: 20px;
 	position: absolute;
 	top: 10px;
-
+	z-index: 99;
 }
 
 .level {

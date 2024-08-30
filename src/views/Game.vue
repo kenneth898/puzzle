@@ -20,9 +20,7 @@
 		</div>
 		<div class="container-fluid">
 			<div class="row">
-
 				<div class="icon">
-
 					<button @click="showPause" style="border: none; background: none;">
 						<svg width="30" height="30" viewBox="0 0 19 21" xmlns="http://www.w3.org/2000/svg">
 							<defs>
@@ -95,7 +93,7 @@
 				</div>
 
 				<!-- Time Up Overlay -->
-				<!-- <div v-if="showPopupTimeUp" class="overlay">
+				<div v-if="showPopupTimeUp" class="overlay">
 					<div class="time-up">
 						<div class="time-logo">
 							<img src="/image/timeup.webp">
@@ -108,7 +106,7 @@
 							</a>
 						</div>
 					</div>
-				</div> -->
+				</div>
 
 				<!-- Pause Overlay -->
 				<div v-if="showPopupPause" class="overlay">
@@ -809,7 +807,7 @@ export default {
 	padding-top: 20px;
 	position: absolute;
 	top: 10px;
-
+	z-index: 99;
 }
 
 .level {

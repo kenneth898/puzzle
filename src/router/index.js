@@ -34,24 +34,24 @@ const router = createRouter({
 });
 
 router.beforeEach((to, from, next) => {
-	const token = Cookies.get('token'); // 从 Cookies 获取 token
+	const token = Cookies.get('token'); // Get token from Cookies
 
 	if (token) {
-		// 已登录用户
+		// User is logged in
 		if (to.name === 'Login') {
-			// 如果用户已登录并访问登录页，重定向到 Home
+			// If the user is already logged in and tries to access the Login page, redirect to Home
 			next({ name: 'Home' });
 		} else {
-			// 允许访问其他受保护的页面
+			// Allow access to other protected pages
 			next();
 		}
 	} else {
-		// 未登录用户
+		// User is not logged in
 		if (to.name !== 'Login') {
-			// 如果未登录并试图访问除登录页之外的页面，重定向到 Login
+			// If not logged in and trying to access any page other than Login, redirect to Login
 			next({ name: 'Login' });
 		} else {
-			// 允许访问登录页面
+			// Allow access to the Login page
 			next();
 		}
 	}
