@@ -18,29 +18,43 @@
 			</button>
 		</div>
 		<div class="title">
-			<div class="login-col">
-				<div class="title2">
-					<h1 style="margin:0;">Puzzle</h1>
-					<h1 style="margin:0;">Challenge</h1>
-				</div>
-				<div class="login">
-					<img width="20%" src="/image/username.webp">
-					<input type="text" class="form-control" id="username" placeholder="USERNAME">
+
+
+			<div class="title2">
+				<h3 style="margin:0;">Puzzle</h3>
+				<h3 style="margin:0;">Challenge</h3>
+			</div>
+			<div class="login-col ">
+
+
+
+				<div class="blur">
+					<div class="login">
+						<img width="20%" src="/image/username.webp">
+						<input type="text" class="form-control" id="username" placeholder="USERNAME">
+					</div>
+					<br>
+
+					<div class="uid">
+						<img width="20%" src="/image/uid.webp">
+						<input type="text" class="form-control" id="uid" v-model="uid" placeholder="UID" />
+					</div>
+
+					<div class="register">
+						<p style="padding-bottom: 80px;text-align">Don't have an account? <a
+								href="https://kk8.my/register">Register</a></p>
+					</div>
 				</div>
 				<br>
-				<div class="uid">
-					<img width="20%" src="/image/uid.webp">
-					<input type="text" class="form-control" id="uid" v-model="uid" placeholder="UID" />
-				</div>
-				<div class="register">
-					<p style="padding-bottom: 150px;text-align">Don't have an account? <a
-							href="https://kk8.my/register">Register</a></p>
-				</div>
-				<br>
+
 				<div class="login-btn">
 					<button @click="validateLogin" class="nav-link">Login</button>
 				</div>
+
+
+
 			</div>
+
 
 
 
@@ -316,20 +330,28 @@ export default {
 	/* position: absolute;
 	transform: translate(8%, 35%); */
 	width: 85%;
+	height: 350px;
+	position: relative;
+
 }
 
-.big {
+.blur {
 	background: rgba(219, 236, 255, 0.25);
 	box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
 	backdrop-filter: blur(5px);
-	width: 100%;
-	height: 100%;
+	height: 80%;
+	width: 87%;
+	position: absolute;
+	top: 0;
+	left: 0;
+	transform: translate(5%, 13%);
+	border-radius: 11px;
 }
 
 .login {
 	display: flex;
-	padding-top: 50px;
-	margin-left: 30px;
+	padding-top: 20px;
+	margin-left: 40px;
 	margin-right: 33px;
 	padding-right: 15px;
 	place-content: center;
@@ -381,7 +403,7 @@ export default {
 	position: absolute;
 	bottom: 0;
 	width: 50%;
-	transform: translate(33%, -25%);
+	transform: translate(50%, -25%);
 }
 
 @media screen and (min-width:425px) {
@@ -594,10 +616,9 @@ export default {
 
 .form-control {
 	color: #626262;
-	font-family: Montserrat;
 	font-size: 18px;
 	font-style: normal;
-	font-weight: 700;
+	font-weight: bolder;
 	line-height: normal;
 
 	width: 70%;
@@ -605,15 +626,15 @@ export default {
 
 /* @media screen and () */
 
-.title2 {
-	transform: translate(0, -25%);
+.title2 h3 {
+	transform: translate(0, 50%);
 	color: #F7FEFF;
 	text-align: center;
 	text-shadow: 0px 7px 21.4px #0068E6;
-	font-family: Mitr;
-	font-size: 25px;
+
+	font-size: 28px;
 	font-style: normal;
-	font-weight: bold;
+	font-weight: bolder;
 	line-height: 92%;
 	/* 32.2px */
 	letter-spacing: 1.75px;
@@ -621,8 +642,8 @@ export default {
 }
 
 @media screen and (min-width:435px) {
-	.title2 {
-		font-size: 35px;
+	.title2 h3 {
+		font-size: 38px;
 	}
 }
 
