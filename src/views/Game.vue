@@ -260,6 +260,10 @@ export default {
 		}
 	},
 	methods: {
+		goToLevel() {
+			localStorage.setItem('hasVisitedGame', 'true'); // Mark that Game was visited
+			this.$router.push({ name: 'Level' }); // Navigate to the Level page
+		},
 		playClickSound() {
 			const clickSound = this.$refs.clickSound;
 			if (clickSound) {
@@ -269,6 +273,8 @@ export default {
 		},
 		nextLevel() {
 			this.playClickSound();
+			// Set flag in localStorage to allow access to Level
+			localStorage.setItem('canAccessLevel', 'true');
 			setTimeout(() => {
 				this.$router.push('/level');
 			}, 500);

@@ -30,9 +30,11 @@
 				<div class="start-btn" @click="handleStartClick">
 					<a href="#">START</a>
 				</div>
-				<div class="quit-btn" @click="handleQuitClick">
-					<a href="https://kk8info.com/puzzle-challenge/">QUIT</a>
-				</div>
+				<a href="https://kk8info.com/puzzle-challenge/" style="text-decoration: none;">
+					<div class="quit-btn" @click="handleQuitClick">
+						<a href="#" style="text-decoration: none;">QUIT</a>
+					</div>
+				</a>
 				<div class=" term">
 					<a href="">
 						<p>Term and Conditions Apply</p>
@@ -120,6 +122,10 @@ export default {
 		])
 	},
 	methods: {
+		goToGame() {
+			localStorage.setItem('hasVisitedHome', 'true'); // Mark that Home was visited
+			this.$router.push({ name: 'Game' }); // Navigate to the Game page
+		},
 		...mapActions([
 			'setVolume1',
 			'setVolume2'
@@ -165,9 +171,7 @@ export default {
 		},
 		handleQuitClick() {
 			this.playClickSound();
-			setTimeout(() => {
-				this.$router.push('/');
-			}, 500);
+
 		},
 		playClickSound() {
 			const clickSound = this.$refs.clickSound;

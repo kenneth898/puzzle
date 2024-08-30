@@ -32,27 +32,25 @@ const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
 	routes
 });
-
 router.beforeEach((to, from, next) => {
 	const token = Cookies.get('token'); // Get token from Cookies
 
-	if (token) {
-		// User is logged in
-		if (to.name === 'Login') {
-			// If the user is already logged in and tries to access the Login page, redirect to Home
-			next({ name: 'Home' });
-		} else {
-			// Allow access to other protected pages
-			next();
-		}
+	if (to.name === 'Level') {
+		next({ name: 'Home' }); // Redirect any attempt to access Level to Home
 	} else {
-		// User is not logged in
-		if (to.name !== 'Login') {
-			// If not logged in and trying to access any page other than Login, redirect to Login
-			next({ name: 'Login' });
+		if (token) {
+			// User is logged in
+			if (to.name === 'Login') {
+				next({ name: 'Home' }); // Redirect to Home if logged in and trying to access Login
+			} else {
+				next(); // Allow navigation
+			}
 		} else {
-			// Allow access to the Login page
-			next();
+			if (to.name !== 'Login') {
+				next({ name: 'Login' }); // Redirect to Login if not logged in and trying to access other pages
+			} else {
+				next(); // Allow access to Login page
+			}
 		}
 	}
 });

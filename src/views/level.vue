@@ -260,6 +260,12 @@ export default {
 			promoCode: ''
 		};
 	},
+	beforeRouteLeave(to, from, next) {
+		if (to.name !== 'Level') {
+			localStorage.removeItem('canAccessLevel'); // Clear the access flag
+		}
+		next();
+	},
 	created() {
 		window.addEventListener('beforeunload', this.setReloadFlag);
 		window.addEventListener('unload', this.handleUnload);
@@ -288,6 +294,12 @@ export default {
 		}
 	},
 	methods: {
+		logout() {
+			localStorage.removeItem('hasVisitedHome');
+			localStorage.removeItem('hasVisitedGame');
+			Cookies.remove('token');
+			this.$router.push({ name: 'Login' });
+		},
 		updatePromoCode() {
 			const startDate = new Date(2024, 7, 31); // Promo Code 开始的日期，月份从0开始（8月是7）
 			const currentDate = new Date();
