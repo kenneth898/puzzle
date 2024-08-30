@@ -1,23 +1,24 @@
 <template>
 	<div class="fix-mobile-size">
+		<div class="btn_col">
+			<!-- Button to toggle popup -->
+			<button @click="showSettingsPopup = true" style="border: none; background: none;">
+				<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 33 33" fill="none">
+					<path
+						d="M13.3571 0L12.6083 4.125C11.8802 4.35384 11.1753 4.64912 10.5089 4.99668L7.04688 2.61498L2.60268 7.05918L4.99667 10.5089C4.64762 11.1772 4.35455 11.8779 4.125 12.6083L0 13.3571V19.6429L4.125 20.3917C4.35514 21.1239 4.65874 21.8214 5.00893 22.4911L2.60268 25.9409L7.04688 30.3851L10.4967 28.0034C11.1659 28.3532 11.8767 28.6451 12.6083 28.875L13.3571 33H19.6429L20.3917 28.875C21.122 28.6454 21.8228 28.3524 22.4911 28.0034L25.9408 30.3851L30.3851 25.9409L27.9911 22.4911C28.3386 21.8258 28.6335 21.1309 28.8627 20.404L33 19.6429V13.3571L28.8627 12.6083C28.6347 11.8828 28.3493 11.1855 28.0033 10.5212L30.3851 7.05918L25.9408 2.61498L22.4911 4.99668C21.8228 4.64766 21.1221 4.35459 20.3917 4.125L19.6429 0H13.3571ZM16.5 9.42857C20.4055 9.42857 23.5714 12.5945 23.5714 16.5C23.5714 20.4055 20.4055 23.5715 16.5 23.5715C12.5946 23.5715 9.42857 20.4055 9.42857 16.5C9.42857 12.5945 12.5946 9.42857 16.5 9.42857Z"
+						fill="url(#paint0_linear_334_2192)" />
+					<defs>
+						<linearGradient id="paint0_linear_334_2192" x1="6.67857" y1="0.392857" x2="29.8571" y2="41.0536"
+							gradientUnits="userSpaceOnUse">
+							<stop stop-color="#FEF0A3" />
+							<stop offset="1" stop-color="#F08B5A" />
+						</linearGradient>
+					</defs>
+				</svg>
+			</button>
+		</div>
 		<div class="title">
-			<div class="btn_col">
-				<!-- Button to toggle popup -->
-				<button @click="showSettingsPopup = true" style="border: none; background: none;">
-					<svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 33 33" fill="none">
-						<path
-							d="M13.3571 0L12.6083 4.125C11.8802 4.35384 11.1753 4.64912 10.5089 4.99668L7.04688 2.61498L2.60268 7.05918L4.99667 10.5089C4.64762 11.1772 4.35455 11.8779 4.125 12.6083L0 13.3571V19.6429L4.125 20.3917C4.35514 21.1239 4.65874 21.8214 5.00893 22.4911L2.60268 25.9409L7.04688 30.3851L10.4967 28.0034C11.1659 28.3532 11.8767 28.6451 12.6083 28.875L13.3571 33H19.6429L20.3917 28.875C21.122 28.6454 21.8228 28.3524 22.4911 28.0034L25.9408 30.3851L30.3851 25.9409L27.9911 22.4911C28.3386 21.8258 28.6335 21.1309 28.8627 20.404L33 19.6429V13.3571L28.8627 12.6083C28.6347 11.8828 28.3493 11.1855 28.0033 10.5212L30.3851 7.05918L25.9408 2.61498L22.4911 4.99668C21.8228 4.64766 21.1221 4.35459 20.3917 4.125L19.6429 0H13.3571ZM16.5 9.42857C20.4055 9.42857 23.5714 12.5945 23.5714 16.5C23.5714 20.4055 20.4055 23.5715 16.5 23.5715C12.5946 23.5715 9.42857 20.4055 9.42857 16.5C9.42857 12.5945 12.5946 9.42857 16.5 9.42857Z"
-							fill="url(#paint0_linear_334_2192)" />
-						<defs>
-							<linearGradient id="paint0_linear_334_2192" x1="6.67857" y1="0.392857" x2="29.8571"
-								y2="41.0536" gradientUnits="userSpaceOnUse">
-								<stop stop-color="#FEF0A3" />
-								<stop offset="1" stop-color="#F08B5A" />
-							</linearGradient>
-						</defs>
-					</svg>
-				</button>
-			</div>
+
 
 
 
@@ -252,6 +253,7 @@ export default {
 	background-repeat: round;
 	position: relative;
 	margin: 0 auto;
+	align-content: center;
 }
 
 /* .fix-mobile-size::before {
@@ -276,7 +278,7 @@ export default {
 .title {
 	color: white;
 	position: relative;
-
+	text-align: -webkit-center;
 }
 
 .title h1 {
@@ -284,7 +286,7 @@ export default {
 	text-align: center;
 	text-shadow: 0px 7px 21.4px #0068E6;
 	font-family: Mitr;
-	font-size: 35px;
+	font-size: 24px;
 	font-style: normal;
 	font-weight: bold;
 	line-height: 92%;
@@ -292,6 +294,12 @@ export default {
 	letter-spacing: 1.75px;
 	text-transform: uppercase;
 	margin-bottom: 30px;
+}
+
+@media screen and (min-width:375px) {
+	.title h1 {
+		font-size: 34px;
+	}
 }
 
 /* .bg3 {
@@ -309,8 +317,8 @@ export default {
 	background-size: cover;
 	background-repeat: round;
 	margin-left: 12px;
-	position: absolute;
-	transform: translate(8%, 35%);
+	/* position: absolute;
+	transform: translate(8%, 35%); */
 	width: 85%;
 }
 
@@ -370,14 +378,20 @@ export default {
 
 .login-btn {
 	background-image: url('/image/start_bg.webp');
-	padding: 20px 15px;
+	padding: 15px 15px;
 	background-repeat: round;
 	background-size: cover;
 	text-align: -webkit-center;
 	position: absolute;
 	bottom: 0;
 	width: 50%;
-	transform: translate(49%, -25%);
+	transform: translate(33%, -25%);
+}
+
+@media screen and (min-width:425px) {
+	.login-btn {
+		padding: 20px 15px;
+	}
 }
 
 .register a {
@@ -457,7 +471,7 @@ export default {
 .btn_col {
 	position: absolute;
 	top: 20px;
-	left: 20px;
+	right: 20px;
 
 }
 
@@ -601,13 +615,19 @@ export default {
 	text-align: center;
 	text-shadow: 0px 7px 21.4px #0068E6;
 	font-family: Mitr;
-	font-size: 35px;
+	font-size: 25px;
 	font-style: normal;
 	font-weight: bold;
 	line-height: 92%;
 	/* 32.2px */
 	letter-spacing: 1.75px;
 	text-transform: uppercase;
+}
+
+@media screen and (min-width:435px) {
+	.title2 {
+		font-size: 35px;
+	}
 }
 
 .big {

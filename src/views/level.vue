@@ -21,9 +21,7 @@
 		<div class="container-fluid">
 			<div class="row">
 				<div class="icon">
-					<div class="level">
-						<h3>Level 2</h3>
-					</div>
+
 					<button @click="showPause" style="border: none; background: none;">
 						<svg width="30" height="30" viewBox="0 0 19 21" xmlns="http://www.w3.org/2000/svg">
 							<defs>
@@ -41,7 +39,9 @@
 						</svg>
 					</button>
 				</div>
-
+				<div class="level">
+					<h3>Level 2</h3>
+				</div>
 				<div class="countdownTime">
 					<p>{{ formattedTime }} Remaining</p>
 				</div>
@@ -101,7 +101,7 @@
 				</div>
 
 				<!-- Time Up Overlay -->
-				<div v-if="showPopupTimeUp" class="overlay">
+				<!-- <div v-if="showPopupTimeUp" class="overlay">
 					<div class="time-up">
 						<div class="time-logo">
 							<img width="35%" src="/image/timeup.webp">
@@ -114,7 +114,7 @@
 							</a>
 						</div>
 					</div>
-				</div>
+				</div> -->
 
 				<!-- Pause Overlay -->
 				<div v-if="showPopupPause" class="overlay">
@@ -848,7 +848,12 @@ export default {
 }
 
 .level {
-	flex: 1;
+	text-align: center;
+	right: 0;
+	left: 0;
+	position: relative;
+	transform: translate(0, 80%);
+	text-align: center;
 	text-align: center;
 }
 
@@ -932,12 +937,9 @@ export default {
 
 .countdownTime {
 	text-align: center;
-	right: 0;
-	left: 0;
-	top: 70px;
-	position: absolute;
-	transform: translate(0, 100%);
+	position: relative;
 	text-align: center;
+	padding-top: 50px;
 }
 
 .countdownView p {
@@ -1214,9 +1216,23 @@ export default {
 }
 
 .puzzle-game {
-	height: 520px;
-	transform: translate(0, 32%);
+	text-align: center;
+	position: relative;
+	top: 0;
+	width: 100%;
+	height: 60vh;
+	align-content: center;
+	justify-content: center;
+	align-items: center;
+	margin: 0 auto;
 	text-align: -webkit-center;
+}
+
+@media screen and (min-width:548px) {
+	.puzzle-game {
+		width: 80%;
+		height: 70vh;
+	}
 }
 
 .puzzle-col {
@@ -1360,6 +1376,12 @@ export default {
 }
 
 @media screen and (min-width:548px) {
+	.view img {
+		width: 15%;
+	}
+}
+
+@media screen and (min-width:1200px) {
 	.view img {
 		width: 20%;
 	}

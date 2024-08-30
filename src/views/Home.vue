@@ -20,10 +20,10 @@
 					</svg>
 				</button>
 			</div>
-			<img width="90%" src="/image/puzzle.webp">
+			<img class="puzzle" src="/image/puzzle.webp">
 			<div class="content_text">
-				<img width="80%" src="/image/merdeka.webp">
-				<img width="70%" src="/image/minigame.webp">
+				<img class="mendeka" src="/image/merdeka.webp">
+				<img class="mini" src="/image/minigame.webp">
 			</div>
 
 			<div class="content_btn">
@@ -31,7 +31,7 @@
 					<a href="#">START</a>
 				</div>
 				<div class="quit-btn" @click="handleQuitClick">
-					<a href="https://kk8.info/">QUIT</a>
+					<a href="https://kk8info.com/">QUIT</a>
 				</div>
 				<div class=" term">
 					<a href="">
@@ -252,12 +252,12 @@ export default {
 }
 
 .overlay {
+	background-color: rgba(0, 0, 0, 1.0);
 	max-width: 540px;
 	position: fixed;
 	top: 0;
 	width: 100%;
 	height: 100vh;
-	background-color: rgba(0, 0, 0, 1.0);
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -273,22 +273,56 @@ export default {
 
 .content_col {
 	text-align: center;
-	padding-left: 20px;
-	padding-right: 20px;
-	position: absolute;
-	padding-top: 80px;
+	position: relative;
+	top: 0;
+	width: 100%;
+	height: 100vh;
+	align-content: center;
+	justify-content: center;
+	align-items: center;
+	margin: 0 auto;
+	overflow: visible;
 }
 
+
+
 .content_text {
-	padding-bottom: 40px;
+	padding-bottom: 30px;
 }
 
 .content_btn {
 	display: grid;
 	gap: 0.5rem;
-	width: 55%;
+	width: 50%;
 	font-weight: bold;
-	transform: translate(40%, 0);
+	transform: translate(50%, 0);
+}
+
+.puzzle {
+	width: 100%;
+}
+
+.mendeka {
+	width: 75%;
+}
+
+.mini {
+	width: 65%;
+}
+
+@media screen and (min-width:468px) {
+	.puzzle {
+		width: 70%;
+	}
+
+	.mendeka {
+		width: 80%;
+	}
+
+	.start-btn,
+	.quit-btn {
+		padding: 25px 10px !important;
+	}
 }
 
 .start-btn,
@@ -297,7 +331,7 @@ export default {
 	text-decoration: none;
 	background-size: cover;
 	background-repeat: round;
-	padding: 25px 10px;
+	padding: 15px 10px;
 }
 
 .start-btn {
@@ -308,9 +342,9 @@ export default {
 
 .start-btn a {
 	font-family: Montserrat;
-	font-size: 27px;
+	font-size: 24px;
 	font-weight: 700;
-	line-height: 32.27px;
+	/* line-height: 32.27px; */
 	background: linear-gradient(0deg, #CF8403 0%, #BC4F01 55.59%);
 	-webkit-background-clip: text;
 	-webkit-text-fill-color: transparent;
@@ -322,7 +356,7 @@ export default {
 
 .quit-btn a {
 	font-family: Montserrat;
-	font-size: 27px;
+	font-size: 24px;
 	font-weight: 700;
 	line-height: 32.27px;
 	background: linear-gradient(0deg, #FFFFFF 0%, #FFE6E3 75.5%);
