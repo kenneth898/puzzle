@@ -351,8 +351,8 @@ export default {
 .login {
 	display: flex;
 	padding-top: 20px;
-	margin-left: 40px;
-	margin-right: 33px;
+	margin-left: 30px;
+	margin-right: 30px;
 	padding-right: 15px;
 	place-content: center;
 
