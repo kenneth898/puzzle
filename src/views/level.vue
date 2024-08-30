@@ -86,9 +86,13 @@
 				<div v-if="showPopupLevel2" class="overlay">
 					<div class="congrats">
 						<h3>Congratulations!</h3>
-						<p>You earned 30 points</p>
+						<p>You earn 67% Reload Bonus</p>
+						<div class="promocode">
+							<p>{{ promoCode }}</p>
+						</div>
+
 						<div class="nextlevel">
-							<router-link class="nav-link " to="/">
+							<router-link class="nav-link " to="/home">
 								OK
 							</router-link>
 						</div>
@@ -162,7 +166,7 @@
 								</div>
 							</div>
 							<div class="home-continue-btn">
-								<router-link class="nav-link" to="/">
+								<router-link class="nav-link" to="/home">
 									<img src="/image/home.webp">
 								</router-link>
 								<a href="#" @click="continueCountdown">
@@ -189,8 +193,8 @@ export default {
 		return {
 			btnExit: false,
 			btnPause: false,
-			time: 60,
-			remainingTime: 60,
+			time: 120,
+			remainingTime: 120,
 			timer: null,
 			showPopupImage: false,
 			showPopupLevel2: false,
@@ -234,6 +238,14 @@ export default {
 			countdownLast: null,
 			countdownLastPlayed: false,
 			countdownLastPauseTime: 0,
+			promoCodes: [
+				'ABAB2211', // 8月29日
+				'QQPP4599', // 8月30日
+				'XYZA1122', // 8月31日
+				'LMNO3344', // 9月1日
+				// ...更多的 Promo Codes
+			],
+			promoCode: ''
 		};
 	},
 	created() {
@@ -264,6 +276,14 @@ export default {
 		}
 	},
 	methods: {
+		updatePromoCode() {
+			const startDate = new Date(2024, 7, 29); // Promo Code 开始的日期，月份从0开始（8月是7）
+			const currentDate = new Date();
+			const dayDifference = Math.floor((currentDate - startDate) / (1000 * 60 * 60 * 24));
+
+			// 选择相应的 Promo Code，如果超出范围则循环使用
+			this.promoCode = this.promoCodes[dayDifference % this.promoCodes.length];
+		},
 		playClickSound() {
 			const clickSound = this.$refs.clickSound;
 			if (clickSound) {
@@ -280,7 +300,7 @@ export default {
 		TimeupOk() {
 			this.playClickSound();
 			setTimeout(() => {
-				this.$router.push('/');
+				this.$router.push('/home');
 			}, 500);
 		},
 		selectRandomImage() {
@@ -642,8 +662,8 @@ export default {
 
 				randomized.adjustImagesToPuzzleHeight();
 				randomized.autogenerate({
-					horizontalPiecesCount: 4,
-					verticalPiecesCount: 4,
+					horizontalPiecesCount: 2,
+					verticalPiecesCount: 2,
 				});
 
 				randomized.shuffle(0.8);
@@ -737,6 +757,7 @@ export default {
 		}
 	},
 	mounted() {
+		this.updatePromoCode();
 		this.selectRandomImage();
 		this.initializePuzzle();
 		setTimeout(() => {
@@ -1224,7 +1245,7 @@ export default {
 	}
 
 	.view p {
-		font-size: 18px;
+		font-size: 16px;
 	}
 
 
@@ -1473,5 +1494,21 @@ export default {
 
 .countdown {
 	position: relative;
+}
+
+.promocode {
+	background-color: white;
+	width: 40%;
+	padding: 5px;
+}
+
+.promocode p {
+	color: #BD5002;
+	text-align: center;
+	font-family: Montserrat;
+	font-style: normal;
+	font-weight: 800;
+	line-height: normal;
+	margin: 0;
 }
 </style>

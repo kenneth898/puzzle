@@ -1,7 +1,7 @@
 <template>
 	<div class="fix-mobile-size">
 		<!-- Background music audio element -->
-		<audio ref="bgm" :src="bgmSrc" loop autoplay></audio>
+		<!-- <audio ref="bgm" :src="bgmSrc" loop autoplay></audio> -->
 		<div class="content_col">
 			<div class="btn_col">
 				<!-- Button to toggle popup -->
@@ -31,9 +31,9 @@
 					<a href="#">START</a>
 				</div>
 				<div class="quit-btn" @click="handleQuitClick">
-					<router-link class="nav-link" to="/">QUIT</router-link>
+					<a href="kk8.info">QUIT</a>
 				</div>
-				<div class="term">
+				<div class=" term">
 					<a href="">
 						<p>Term and Conditions Apply</p>
 					</a>
@@ -123,18 +123,17 @@ export default {
 		...mapActions([
 			'setVolume1',
 			'setVolume2'
-		]),
+		]), updateVolume1() {
+			this.setVolume1(this.volume1);
+		},
 		...mapMutations([
 			'SET_VOLUME1',
 			'SET_VOLUME2'
 		]),
 		updateVolume1() {
-			const bgm = this.$refs.bgm;
-			if (bgm) {
-				this.setVolume1(this.volume1);
-				bgm.volume = this.volume1;
-				document.documentElement.style.setProperty('--value1', this.volume1);
-			}
+			this.setVolume1(this.volume1);
+			this.$root.$refs.bgm.volume = this.volume1;
+			document.documentElement.style.setProperty('--value1', this.volume1);
 		},
 		updateVolume2() {
 			const clickSound = this.$refs.clickSound;
@@ -236,7 +235,7 @@ export default {
 .btn_col {
 	position: absolute;
 	top: 20px;
-	left: 20px;
+	right: 20px;
 
 }
 

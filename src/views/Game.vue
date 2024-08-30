@@ -159,7 +159,7 @@
 								</div>
 							</div>
 							<div class="home-continue-btn">
-								<router-link class="nav-link" to="/">
+								<router-link class="nav-link" to="/home">
 									<img src="/image/home.webp">
 								</router-link>
 								<a href="#" @click="continueCountdown">
@@ -277,7 +277,7 @@ export default {
 		TimeupOk() {
 			this.playClickSound();
 			setTimeout(() => {
-				this.$router.push('/');
+				this.$router.push('/home');
 			}, 500);
 		},
 		selectRandomImage() {
