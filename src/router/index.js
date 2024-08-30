@@ -6,15 +6,15 @@ import Game from '../views/Game.vue';
 import level from '@/views/level.vue';
 const routes = [
 	{
-		path: '/home',
+		path: '/',
 		name: 'Login',
 		component: Login
 	},
-	// {
-	// 	path: '/home',
-	// 	name: 'Home',
-	// 	component: Home
-	// },
+	{
+		path: '/home',
+		name: 'Home',
+		component: Home
+	},
 	{
 		path: '/game',
 		name: 'Game',

@@ -18,10 +18,6 @@
 			</button>
 		</div>
 		<div class="title">
-
-
-
-
 			<div class="login-col">
 				<div class="title2">
 					<h1 style="margin:0;">Puzzle</h1>
