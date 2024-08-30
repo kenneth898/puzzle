@@ -42,38 +42,38 @@ const router = createRouter({
 	history: createWebHistory(import.meta.env.BASE_URL),
 	routes
 });
-// router.beforeEach((to, from, next) => {
-// 	const token = Cookies.get('token'); // Get token from Cookies
+router.beforeEach((to, from, next) => {
+	const token = Cookies.get('token'); // Get token from Cookies
 
-// 	if (to.name === 'Level') {
-// 		// Check if the user is coming from the Game page
-// 		const fromGame = from.name === 'Game';
-// 		const accessedFromGame = localStorage.getItem('accessedFromGame') === 'true';
+	if (to.name === 'Level') {
+		// Check if the user is coming from the Game page
+		const fromGame = from.name === 'Game';
+		const accessedFromGame = localStorage.getItem('accessedFromGame') === 'true';
 
-// 		if (fromGame) {
-// 			// If coming from Game page, allow access and set flag in localStorage
-// 			localStorage.setItem('accessedFromGame', 'true');
-// 			next();
-// 		} else if (accessedFromGame) {
-// 			// If they previously accessed the level from the game, allow access
-// 			next();
-// 		} else {
-// 			// Otherwise, redirect to Home page
-// 			next({ name: 'Home' });
-// 		}
-// 	} else if (token) {
-// 		// User is logged in
-// 		if (to.name === 'Login') {
-// 			next({ name: 'Home' }); // Redirect to Home if logged in and trying to access Login
-// 		} else {
-// 			next(); // Allow navigation
-// 		}
-// 	} else {
-// 		if (to.name !== 'Login') {
-// 			next({ name: 'Login' }); // Redirect to Login if not logged in and trying to access other pages
-// 		} else {
-// 			next(); // Allow access to Login page
-// 		}
-// 	}
-// });
+		if (fromGame) {
+			// If coming from Game page, allow access and set flag in localStorage
+			localStorage.setItem('accessedFromGame', 'true');
+			next();
+		} else if (accessedFromGame) {
+			// If they previously accessed the level from the game, allow access
+			next();
+		} else {
+			// Otherwise, redirect to Home page
+			next({ name: 'Home' });
+		}
+	} else if (token) {
+		// User is logged in
+		if (to.name === 'Login') {
+			next({ name: 'Home' }); // Redirect to Home if logged in and trying to access Login
+		} else {
+			next(); // Allow navigation
+		}
+	} else {
+		if (to.name !== 'Login') {
+			next({ name: 'Login' }); // Redirect to Login if not logged in and trying to access other pages
+		} else {
+			next(); // Allow access to Login page
+		}
+	}
+});
 export default router;
