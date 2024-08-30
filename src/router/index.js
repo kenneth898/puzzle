@@ -39,21 +39,19 @@ router.beforeEach((to, from, next) => {
 	if (token) {
 		// 已登录用户
 		if (to.name === 'Login') {
-
-			next({ name: 'Home' });
-		} else if (to.name !== 'Home') {
-
+			// 如果用户已登录并访问登录页，重定向到 Home
 			next({ name: 'Home' });
 		} else {
-
+			// 允许访问其他受保护的页面
 			next();
 		}
 	} else {
-
+		// 未登录用户
 		if (to.name !== 'Login') {
-
+			// 如果未登录并试图访问除登录页之外的页面，重定向到 Login
 			next({ name: 'Login' });
 		} else {
+			// 允许访问登录页面
 			next();
 		}
 	}
