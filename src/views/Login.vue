@@ -36,7 +36,8 @@
 					<input type="text" class="form-control" id="uid" v-model="uid" placeholder="UID" />
 				</div>
 				<div class="register">
-					<p style="padding-bottom: 150px;text-align">Don't have an account? <a href="#">Register</a></p>
+					<p style="padding-bottom: 150px;text-align">Don't have an account? <a
+							href="https://kk8.my/register">Register</a></p>
 				</div>
 				<br>
 				<div class="login-btn">
@@ -149,47 +150,49 @@ export default {
 	},
 	methods: {
 		async validateLogin() {
-			//没有写到东西的话，就是这个popup
 			if (this.uid.trim() === '') {
 				this.popupMessage = 'Please enter your UID';
 				this.showPopup = true;
-
 			} else {
 				try {
-
 					const response = await axios.post('https://devkk8board.mobileapplab.online/api/game/puzzle/login', {
 						uid: this.uid
 					});
 
-					console.log(response);
-
 					if (response.status === 200) {
-
 						const uidResponse = response.data.uid;
-						console.log('get UID:', uidResponse)
-						// Store data to cookie
-						Cookies.set('uid', uidResponse, { expires: 16 });  // uid 可以存16天
+						const tokenResponse = response.data.token;
 
-						this.$router.push('/home');  // 去home page
+						Cookies.set('uid', uidResponse, { expires: 365 * 100 });
+						Cookies.set('token', tokenResponse, { expires: 365 * 100 });
 
+						this.$router.push('/home');
 					} else {
-						// 如果不是200 就不能
 						throw new Error('Non-200 response status');
 					}
 				} catch (error) {
 					console.error('There was a problem with the axios operation:', error);
 
-					// Check if the error has a message
-					if (error.response && error.response.data && error.response.data.msg) {
-						this.popupMessage = error.response.data.msg;  // Translate and show message
-					} else {
-						this.popupMessage = 'error';  // Show a generic system error
-					}
+					// Translate and show the error message directly in the catch block
+					this.popupMessage = (error.response && error.response.data && error.response.data.msg) ?
+						(function (msg) {
+							switch (msg) {
+								case 'Invalid UID':
+									return 'Invalid UID. Please try again.';
+								case 'User not found':
+									return 'Invalid UID. Please sign up for an account.';
+								default:
+									return 'System error, please try again later.';
+							}
+						})(error.response.data.msg) :
+						'System error, please try again later.';
 
 					this.showPopup = true;
 				}
 			}
 		},
+
+
 		closePopup() {
 			this.showPopup = false;
 		},

@@ -239,11 +239,23 @@ export default {
 			countdownLastPlayed: false,
 			countdownLastPauseTime: 0,
 			promoCodes: [
-				'ABAB2211', // 8月29日
-				'QQPP4599', // 8月30日
-				'XYZA1122', // 8月31日
-				'LMNO3344', // 9月1日
-				// ...更多的 Promo Codes
+				'PJMI9G', // 8月29日
+				'GLQ69R', // 8月30日
+				'AR119D', // 8月31日
+				'UNC355',
+				'ZB663U',
+				'Y66RIG',
+				'V6DS2O',
+				'P1HTQS',
+				'H0SIDV',
+				'TYCX8T',
+				'Z4XH4C',
+				'Q3IKPI',
+				'X54G2H',
+				'MPE6UQ',
+				'MM2TG8',
+				'EBR9PU',
+				'Q86SVY'
 			],
 			promoCode: ''
 		};
@@ -277,7 +289,7 @@ export default {
 	},
 	methods: {
 		updatePromoCode() {
-			const startDate = new Date(2024, 7, 29); // Promo Code 开始的日期，月份从0开始（8月是7）
+			const startDate = new Date(2024, 7, 31); // Promo Code 开始的日期，月份从0开始（8月是7）
 			const currentDate = new Date();
 			const dayDifference = Math.floor((currentDate - startDate) / (1000 * 60 * 60 * 24));
 
@@ -662,8 +674,8 @@ export default {
 
 				randomized.adjustImagesToPuzzleHeight();
 				randomized.autogenerate({
-					horizontalPiecesCount: 2,
-					verticalPiecesCount: 2,
+					horizontalPiecesCount: 4,
+					verticalPiecesCount: 4,
 				});
 
 				randomized.shuffle(0.8);
