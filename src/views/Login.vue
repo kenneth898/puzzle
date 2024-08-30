@@ -381,7 +381,7 @@ export default {
 }
 
 .register a {
-	text-decoration: none;
+
 	color: #FFF;
 	font-weight: 700;
 }
