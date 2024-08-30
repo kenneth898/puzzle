@@ -31,7 +31,7 @@
 					<a href="#">START</a>
 				</div>
 				<div class="quit-btn" @click="handleQuitClick">
-					<a href="https://kk8info.com/">QUIT</a>
+					<a href="https://kk8info.com/puzzle-challenge/">QUIT</a>
 				</div>
 				<div class=" term">
 					<a href="">
