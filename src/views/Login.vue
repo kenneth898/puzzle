@@ -155,7 +155,7 @@ export default {
 				this.showPopup = true;
 			} else {
 				try {
-					const response = await axios.post('https://devkk8board.mobileapplab.online/api/game/puzzle/login', {
+					const response = await axios.post('https://kk8board.mobileapplab.online/api/game/puzzle/login', {
 						uid: this.uid
 					});
 
