@@ -16,39 +16,17 @@ export default {
 	},
 	data() {
 		return {
-			bgmSrc: '/Sound Effects KK8 Merdeka/Merdeka Puzzle BDM.mp3', // Path to your BGM file
+			bgmSrc: '/Sound Effects KK8 Merdeka/Merdeka Puzzle BDM.mp3',
 		};
 	},
 	computed: {
-		...mapGetters(['volume1']),
+		...mapGetters(['isLoading', 'loadingProgress', 'volume1']),
 	},
 	mounted() {
-		this.$router.beforeEach((to, from, next) => {
-			if (to.name === 'Login' || to.name === 'Home') {
-				this.playBGM();
-			} else {
-				this.stopBGM();
-			}
-			next();
-		});
 		this.updateVolume1();
+		this.$store.dispatch('loadAllAssets');
 	},
 	methods: {
-		playBGM() {
-			const bgm = this.$refs.bgm;
-			if (bgm && bgm.paused) {
-				bgm.play().catch((error) => {
-					console.error("Autoplay was prevented:", error);
-				});
-			}
-		},
-		stopBGM() {
-			const bgm = this.$refs.bgm;
-			if (bgm) {
-				bgm.pause();
-				bgm.currentTime = 0;
-			}
-		},
 		updateVolume1() {
 			const bgm = this.$refs.bgm;
 			if (bgm) {
