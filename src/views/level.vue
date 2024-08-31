@@ -295,11 +295,54 @@ export default {
 		}
 	},
 	methods: {
-		openLiveChat(event) {
+		initializeLiveChat() {
+			if (!window.LC_API) {
+				window.__lc = window.__lc || {};
+				window.__lc.license = 16350606;
+				window.__lc.integration_name = "manual_channels";
+				window.__lc.product_name = "livechat";
+				(function (n, t, c) {
+					function i(n) {
+						return e._h ? e._h.apply(null, n) : e._q.push(n);
+					}
+					var e = {
+						_q: [],
+						_h: null,
+						_v: "2.0",
+						on: function () {
+							i(["on", c.call(arguments)]);
+						},
+						once: function () {
+							i(["once", c.call(arguments)]);
+						},
+						off: function () {
+							i(["off", c.call(arguments)]);
+						},
+						get: function () {
+							if (!e._h)
+								throw new Error("[LiveChatWidget] You can't use getters before load.");
+							return i(["get", c.call(arguments)]);
+						},
+						call: function () {
+							i(["call", c.call(arguments)]);
+						},
+						init: function () {
+							var n = t.createElement("script");
+							n.async = !0;
+							n.type = "text/javascript";
+							n.src = "https://cdn.livechatinc.com/tracking.js";
+							t.head.appendChild(n);
+						}
+					};
+					!n.__lc.asyncInit && e.init(), n.LiveChatWidget = n.LiveChatWidget || e;
+				})(window, document, [].slice);
+			}
+		},
+		openLiveChat() {
 			if (typeof LC_API !== "undefined") {
 				LC_API.open_chat_window();
 			} else {
-				console.log("LiveChat API 未定义，无法打开聊天窗口");
+				console.log("LiveChat API not defined, cannot open chat window");
 			}
 		},
 
@@ -768,10 +811,11 @@ export default {
 		},
 		showPopupLevel2(newValue) {
 			if (newValue) {
-				this.stopBGMCountdown();// Stop the countdown BGM
+				this.initializeLiveChat(); // Initialize LiveChat when the popup is shown
+				this.stopBGMCountdown(); // Stop the countdown BGM
 				this.playLevel2BGM(); // Play Level 2 BGM when the popup is shown
 			} else {
-				this.stopLevel2BGM(); // Stop Level 2 BGM when popup is hidden
+				this.stopLevel2BGM(); // Stop Level 2 BGM when the popup is hidden
 			}
 		},
 		showPopupTimeUp(newValue) {
@@ -790,45 +834,45 @@ export default {
 		}
 	},
 	mounted() {
-		window.__lc = window.__lc || {};
-		window.__lc.license = 16350606;
-		window.__lc.integration_name = "manual_channels";
-		window.__lc.product_name = "livechat";
-		(function (n, t, c) {
-			function i(n) {
-				return e._h ? e._h.apply(null, n) : e._q.push(n);
-			}
-			var e = {
-				_q: [],
-				_h: null,
-				_v: "2.0",
-				on: function () {
-					i(["on", c.call(arguments)]);
-				},
-				once: function () {
-					i(["once", c.call(arguments)]);
-				},
-				off: function () {
-					i(["off", c.call(arguments)]);
-				},
-				get: function () {
-					if (!e._h)
-						throw new Error("[LiveChatWidget] You can't use getters before load.");
-					return i(["get", c.call(arguments)]);
-				},
-				call: function () {
-					i(["call", c.call(arguments)]);
-				},
-				init: function () {
-					var n = t.createElement("script");
-					n.async = !0;
-					n.type = "text/javascript";
-					n.src = "https://cdn.livechatinc.com/tracking.js";
-					t.head.appendChild(n);
-				}
-			};
-			!n.__lc.asyncInit && e.init(), n.LiveChatWidget = n.LiveChatWidget || e;
-		})(window, document, [].slice);
+		// window.__lc = window.__lc || {};
+		// window.__lc.license = 16350606;
+		// window.__lc.integration_name = "manual_channels";
+		// window.__lc.product_name = "livechat";
+		// (function (n, t, c) {
+		// 	function i(n) {
+		// 		return e._h ? e._h.apply(null, n) : e._q.push(n);
+		// 	}
+		// 	var e = {
+		// 		_q: [],
+		// 		_h: null,
+		// 		_v: "2.0",
+		// 		on: function () {
+		// 			i(["on", c.call(arguments)]);
+		// 		},
+		// 		once: function () {
+		// 			i(["once", c.call(arguments)]);
+		// 		},
+		// 		off: function () {
+		// 			i(["off", c.call(arguments)]);
+		// 		},
+		// 		get: function () {
+		// 			if (!e._h)
+		// 				throw new Error("[LiveChatWidget] You can't use getters before load.");
+		// 			return i(["get", c.call(arguments)]);
+		// 		},
+		// 		call: function () {
+		// 			i(["call", c.call(arguments)]);
+		// 		},
+		// 		init: function () {
+		// 			var n = t.createElement("script");
+		// 			n.async = !0;
+		// 			n.type = "text/javascript";
+		// 			n.src = "https://cdn.livechatinc.com/tracking.js";
+		// 			t.head.appendChild(n);
+		// 		}
+		// 	};
+		// 	!n.__lc.asyncInit && e.init(), n.LiveChatWidget = n.LiveChatWidget || e;
+		// })(window, document, [].slice);
 
 
 		this.updatePromoCode();
