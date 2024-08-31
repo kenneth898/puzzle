@@ -90,11 +90,12 @@
 						<div class="promocode">
 							<p>{{ promoCode }}</p>
 						</div>
+						<div class="nextlevel" @click.prevent="openLiveChat">
+							<a href="#livechat">Live Chat</a>
 
-						<div class="nextlevel">
-							<router-link class="nav-link " to="/home">
+							<!-- <router-link class="nav-link " to="/home">
 								OK
-							</router-link>
+							</router-link> -->
 						</div>
 
 					</div>
@@ -294,6 +295,14 @@ export default {
 		}
 	},
 	methods: {
+		openLiveChat(event) {
+			if (typeof LC_API !== "undefined") {
+				LC_API.open_chat_window();
+			} else {
+				console.log("LiveChat API 未定义，无法打开聊天窗口");
+			}
+		},
+
 		logout() {
 			localStorage.removeItem('hasVisitedHome');
 			localStorage.removeItem('hasVisitedGame');
@@ -781,6 +790,47 @@ export default {
 		}
 	},
 	mounted() {
+		window.__lc = window.__lc || {};
+		window.__lc.license = 16350606;
+		window.__lc.integration_name = "manual_channels";
+		window.__lc.product_name = "livechat";
+		(function (n, t, c) {
+			function i(n) {
+				return e._h ? e._h.apply(null, n) : e._q.push(n);
+			}
+			var e = {
+				_q: [],
+				_h: null,
+				_v: "2.0",
+				on: function () {
+					i(["on", c.call(arguments)]);
+				},
+				once: function () {
+					i(["once", c.call(arguments)]);
+				},
+				off: function () {
+					i(["off", c.call(arguments)]);
+				},
+				get: function () {
+					if (!e._h)
+						throw new Error("[LiveChatWidget] You can't use getters before load.");
+					return i(["get", c.call(arguments)]);
+				},
+				call: function () {
+					i(["call", c.call(arguments)]);
+				},
+				init: function () {
+					var n = t.createElement("script");
+					n.async = !0;
+					n.type = "text/javascript";
+					n.src = "https://cdn.livechatinc.com/tracking.js";
+					t.head.appendChild(n);
+				}
+			};
+			!n.__lc.asyncInit && e.init(), n.LiveChatWidget = n.LiveChatWidget || e;
+		})(window, document, [].slice);
+
+
 		this.updatePromoCode();
 		this.selectRandomImage();
 		this.initializePuzzle();
@@ -836,6 +886,7 @@ export default {
 	position: relative;
 	margin: 0 auto;
 }
+
 
 .fix-mobile-size::before {
 	content: '';
