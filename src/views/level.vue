@@ -91,7 +91,7 @@
 							<p>{{ promoCode }}</p>
 						</div>
 						<div class="nextlevel" @click.prevent="openLiveChat">
-							<a href="#livechat">Live Chat</a>
+							<a href="#livechat">Claim Now</a>
 
 							<!-- <router-link class="nav-link " to="/home">
 								OK
