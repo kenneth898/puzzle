@@ -83,14 +83,14 @@
 
 				<!-- Level 2 Popup -->
 				<div v-if="showPopupLevel2" class="overlay">
-					<div class="adpopup">
+					<div class="newlevel">
 						<img width="90%" src="/image/Group 1000005998.webp">
 						<div class="nextlevel" @click="nextLevel">
 							<a href="#">NEXT LEVEL</a>
 						</div>
-
 					</div>
 				</div>
+
 
 				<!-- Time Up Overlay -->
 				<div v-if="showPopupTimeUp" class="overlay">
@@ -866,6 +866,20 @@ export default {
 	z-index: 999;
 }
 
+.newlevel {
+	padding: 10px;
+	text-align: center;
+	align-content: center;
+	position: relative;
+}
+
+/* .adpopup {
+	padding: 10px;
+	text-align: center;
+	align-content: center;
+	position: relative;
+} */
+
 .ad-popup {
 	background-image: url('/image/pause-bg.webp');
 	background-size: cover;
@@ -1317,12 +1331,7 @@ export default {
 	transition: opacity 0.5s ease, visibility 0s linear 0.5s;
 }
 
-.adpopup {
-	position: relative;
-	padding: 10px;
-	text-align: center;
-	display: block !important;
-}
+
 
 .viewimg {
 	position: relative;
