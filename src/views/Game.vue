@@ -677,9 +677,9 @@ export default {
 
 				randomized.attachSolvedValidator();
 				randomized.onValid(() => {
-					setTimeout(() => {
-						this.showPopupLevel2 = true;
-					}, 100);
+
+					this.showPopupLevel2 = true;
+
 				});
 			};
 		},
@@ -1315,6 +1315,7 @@ export default {
 	position: relative;
 	padding: 10px;
 	text-align: center;
+	display: block !important;
 }
 
 .viewimg {
