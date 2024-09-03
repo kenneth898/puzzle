@@ -745,6 +745,14 @@ export default {
 		}
 	},
 	mounted() {
+		if (this.showPopupLevel2) {
+			const level2Element = this.$refs.level2;
+			if (level2Element) {
+				level2Element.style.display = 'block'; // 或 'block'，根据需要调整
+				level2Element.style.visibility = 'visible';
+				level2Element.style.opacity = '1';
+			}
+		}
 		this.selectRandomImage();
 		this.initializePuzzle();
 		setTimeout(() => {
