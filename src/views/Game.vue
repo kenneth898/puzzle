@@ -710,6 +710,12 @@ export default {
 	watch: {
 		showOriginalImg(newValue) {
 			if (newValue) {
+				this.$nextTick(() => {
+					const popup = this.$refs.popupLevel2;
+					if (popup) {
+						popup.style.display = 'flex'; // Ensure the display is set correctly
+					}
+				});
 				// Pause all ongoing activities
 				this.stopCountdown();      // Stop the countdown
 				this.stopAllSounds();      // Stop all sounds including BGM
